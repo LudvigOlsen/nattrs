@@ -103,6 +103,8 @@ nested_getattr(a, "b.c.d")
 
 ```
 
+Note: If your function performs the assignment *in-place*, remember to enable the `is_inplace_fn` argument.
+
 ## nested_hasattr
 
 Check presence of the member 'd':
