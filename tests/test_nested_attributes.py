@@ -109,7 +109,7 @@ def test_nested_mutattr_examples():
     # Apply inplace function to dict
     nested_mutattr(
         a, "o", change_dict,
-        is_inplace_fn=False
+        is_inplace_fn=True
     )
 
     # Check new value of p
