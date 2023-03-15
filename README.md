@@ -121,3 +121,64 @@ nested_hasattr(a, "b.o.p")
 >> False
 
 ```
+
+## Populate dicts with empty lists
+
+In this example, we wish to prepopulate nested dicts with empty lists to allow appending within a `for` loop.
+
+Say we have 3 variables that can each hold 2 values. We want to compute *something* for each combination of these values. Let's first define these variables and their options:
+
+```python
+
+animal = ["cat", "dog"]
+food = ["strawberry", "cucumber"]
+temperature = ["cold", "warm"]
+
+```
+
+Let's generate all combinations of these options:
+
+```python
+
+import itertools
+
+combinations = list(itertools.product(*[animal, food, temperature]))
+>> [('cat', 'strawberry', 'cold'),
+>>  ('cat', 'strawberry', 'warm'),
+>>  ('cat', 'cucumber', 'cold'),
+>>  ('cat', 'cucumber', 'warm'),
+>>  ('dog', 'strawberry', 'cold'),
+>>  ('dog', 'strawberry', 'warm'),
+>>  ('dog', 'cucumber', 'cold'),
+>>  ('dog', 'cucumber', 'warm')]
+
+```
+
+Now we can create a nested dict structure with a list in the leaf element:
+
+```python
+
+# Initialize empty dict
+nested_dict = {}
+
+for leaf in combinations:
+    # Join each string with dot-separation:
+    attr = ".".join(list(leaf))
+
+    # Assign empty list to the leafs
+    # `make_missing` creates dicts for each 
+    # missing attribute/dict member
+    nattr.nested_setattr(
+        obj=nested_dict,
+        attr=attr,
+        value=[],
+        make_missing=True
+    )
+
+nested_dict
+>> {'cat': {'strawberry': {'cold': [], 'warm': []},
+>>          'cucumber':   {'cold': [], 'warm': []}},
+>>  'dog': {'strawberry': {'cold': [], 'warm': []},
+>>          'cucumber':   {'cold': [], 'warm': []}}}
+
+```
