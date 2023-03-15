@@ -8,11 +8,23 @@ Alpha stage. Subject to change.
 
 > https://pypi.python.org/pypi/nattrs/     
 
-> $ pip install nattrs  
-> $ python -m pip install git+https://github.com/ludvigolsen/nattrs
 
-Update this package but not dependencies:
-> $ python -m pip install --force-reinstall --no-deps git+https://github.com/ludvigolsen/nattrs
+# Installation
+
+Install from pip:
+
+```shell
+pip install nattrs
+```
+
+Install from GitHub:
+
+```shell
+python -m pip install git+https://github.com/ludvigolsen/nattrs
+```
+
+
+# Main functions
 
 | Class/Function   | Description |
 |:-----------------|:------------|
