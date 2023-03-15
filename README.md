@@ -20,6 +20,7 @@ Update this package but not dependencies:
 | `nested_setattr` | Set object attribute/dict member by recursive lookup, given by dot-separated names. |
 | `nested_mutattr` | Apply function (mutate) to object attribute/dict member by recursive lookup, given by dot-separated names. |
 | `nested_hasattr` | Check whether recursive object attributes/dict members exist. |
+| `populate_product` | Create and populate nested dicts with specified layers and the same leaf value. |
 
 
 # Examples
@@ -122,9 +123,9 @@ nested_hasattr(a, "b.o.p")
 
 ```
 
-## Populate dicts with empty lists
+## populate_product
 
-In this example, we wish to prepopulate nested dicts with empty lists to allow appending within a `for` loop.
+In this example, we wish to pre-populate nested dicts with empty lists to allow appending within a `for` loop. First, we go through the manual approach of doing this. Second, we show how easy it is to do with `populate_product()`. 
 
 Say we have 3 variables that can each hold 2 values. We want to compute *something* for each combination of these values. Let's first define these variables and their options:
 
@@ -136,13 +137,14 @@ temperature = ["cold", "warm"]
 
 ```
 
-Let's generate all combinations of these options:
+Let's generate the product of these options:
 
 ```python
 
 import itertools
 
 combinations = list(itertools.product(*[animal, food, temperature]))
+combinations
 >> [('cat', 'strawberry', 'cold'),
 >>  ('cat', 'strawberry', 'warm'),
 >>  ('cat', 'cucumber', 'cold'),
@@ -168,7 +170,7 @@ for leaf in combinations:
     # Assign empty list to the leafs
     # `make_missing` creates dicts for each 
     # missing attribute/dict member
-    nattr.nested_setattr(
+    nattrs.nested_setattr(
         obj=nested_dict,
         attr=attr,
         value=[],
@@ -180,5 +182,21 @@ nested_dict
 >>          'cucumber':   {'cold': [], 'warm': []}},
 >>  'dog': {'strawberry': {'cold': [], 'warm': []},
 >>          'cucumber':   {'cold': [], 'warm': []}}}
+
+```
+
+This dict population is actually provided by `populate_product()`. Instead of an empty list, let's set the value to an "edibility" score that could be changed by a later function:
+
+```python
+
+layers = [animal, food, temperature]
+populate_product(
+    layers=layers,
+    val=False
+)
+>> {'cat': {'strawberry': {'cold': False, 'warm': False},
+>>          'cucumber':   {'cold': False, 'warm': False}},
+>>  'dog': {'strawberry': {'cold': False, 'warm': False},
+>>          'cucumber':   {'cold': False, 'warm': False}}}
 
 ```
