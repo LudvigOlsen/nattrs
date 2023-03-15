@@ -102,8 +102,8 @@ def test_nested_mutattr_examples():
     # Check new value of n
     assert nested_getattr(a, "o.n") == [3, 4, 5, 6, 7, 8]
 
-    def change_dict(d:dict) -> None:
-        d["p"] = [x+1 for x in d["n"]]
+    def change_dict(d: dict) -> None:
+        d["p"] = [x + 1 for x in d["n"]]
         del d["n"]
 
     # Apply inplace function to dict
