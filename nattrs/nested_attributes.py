@@ -75,7 +75,7 @@ def nested_getattr(obj: Union[object, dict], attr: str, default: Any = None, all
 
 def _nested_getattr(obj: Union[object, dict], attr: str, default: Any = None):
     """
-    Modified from:
+    Inspired by:
     https://programanddesign.com/python-2/recursive-getsethas-attr/
     """
     if obj is None:
@@ -146,7 +146,7 @@ def nested_hasattr(obj: Union[object, dict], attr: str, allow_none: bool = False
 
 def _nested_hasattr(obj: Union[object, dict], attr: str):
     """
-    Modified from:
+    Inspired by:
     https://programanddesign.com/python-2/recursive-getsethas-attr/
     """
     if obj is None:
@@ -210,8 +210,6 @@ def nested_setattr(obj: Union[object, dict], attr: str, value: Any, make_missing
     >>> nested_getattr(a, "b.c.d")
     2
     """
-    # Modified from:
-    # https://programanddesign.com/python-2/recursive-getsethas-attr/
 
     getter = partial(_dict_getter, default="make" if make_missing else "raise") \
         if isinstance(obj, dict) else (get_or_make_attr if make_missing else getattr)
