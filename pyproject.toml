@@ -1,12 +1,25 @@
 [tool.poetry]
 name = "nattrs"
 version = "0.1.0"
-description = "Nested attributes that works with dictionaries and class instances interchangeably."
-authors = ["Ludvig <mail@ludvigolsen.dk>"]
+description = "Nested attribute getter/setter that works with dictionaries and objects interchangeably."
+authors = ["Ludvig Renbo Olsen <mail@ludvigolsen.dk>"]
 readme = "README.md"
+license = "MIT"
+include = ["CHANGELOG.md"]
+repository = "https://github.com/ludvigolsen/nattrs"
+keywords = [
+    "attributes",
+    "dictionaries",
+    "class",
+    "recursive",
+]
+
+[tool.poetry.urls]
+issues = "https://github.com/ludvigolsen/nattrs/issues"
 
 [tool.poetry.dependencies]
 python = "^3.7"
+
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.0.0"
 

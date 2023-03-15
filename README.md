@@ -1,7 +1,7 @@
 nattrs
 --------
 
-Nested attributes utility functions for python. Allows getting/setting of object attributes and dict members interchangeably.
+**Nested attributes** utility functions for python. Allows getting/setting of object attributes and dict members interchangeably.
 Useful to populate nested dicts for storing outputs of a loop.
 
 Alpha stage. Subject to change.
