@@ -5,10 +5,11 @@ from typing import List, Any
 from nattrs.nested_attributes import nested_setattr
 
 # TODO Improve documentation
-# TODO What if keys have dots in them? This *could* actually be a feature allowing 
+# TODO What if keys have dots in them? This *could* actually be a feature allowing
 # to have some layers not be part of the product - but must be described in docs?
 
-def populate_product(layers:List[List[Any]], val:Any) -> dict:
+
+def populate_product(layers: List[List[Any]], val: Any) -> dict:
     """
     Create and populate a dict with layers of dicts
     with all leafs having the same value (e.g. an empty list).
@@ -17,6 +18,7 @@ def populate_product(layers:List[List[Any]], val:Any) -> dict:
     so `layers=[["a", "b"], ["c", "d"]]` gives the following branches:
         `"a.c", "a.d", "b.c", "b.d"`.
 
+
     Parameters
     ----------
     layers : List of lists of dict keys
@@ -24,7 +26,7 @@ def populate_product(layers:List[List[Any]], val:Any) -> dict:
         Each layer can have any positive number of dict keys (must be hashable).
     val : Any
         Value to set for all leafs.
-    
+
     Returns
     -------
     dict (of dicts)
@@ -55,7 +57,7 @@ def populate_product(layers:List[List[Any]], val:Any) -> dict:
 
     """
 
-    assert all([len(l)>0 for l in layers]), \
+    assert all([len(l) > 0 for l in layers]), \
         "All layers must have a positive number of keys (list elements)."
 
     combinations = list(itertools.product(*layers))
@@ -63,11 +65,11 @@ def populate_product(layers:List[List[Any]], val:Any) -> dict:
     nested_dict = {}
 
     for leaf in combinations:
-        # Join each string with dot-separation:
+        # Join each string with dot-separation
         attr = ".".join(list(leaf))
 
         # Assign empty list to the leafs
-        # `make_missing` creates dicts for each 
+        # `make_missing` creates dicts for each
         # missing attribute/dict member
         nested_setattr(
             obj=nested_dict,
