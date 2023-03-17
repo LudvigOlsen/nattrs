@@ -11,7 +11,7 @@ Alpha stage. Subject to change.
 
 # Installation
 
-Install from pip:
+Install from PyPI:
 
 ```shell
 pip install nattrs

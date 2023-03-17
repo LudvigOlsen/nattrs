@@ -11,3 +11,4 @@ v0.1.0 (03-2023)
     - `nested_hasattr()`
     - `nested_setattr()`
     - `nested_mutattr()`
+    - `populate_product()`
