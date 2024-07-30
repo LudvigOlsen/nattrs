@@ -1,6 +1,10 @@
 Changelog
 --------
 
+v0.1.2 (07-2024)
+ - Handles `zipp` vulnerability.
+ - Now requires `Python==3.8` or newer.
+
 v0.1.1 (03-2023)
  - Reformats README
 
