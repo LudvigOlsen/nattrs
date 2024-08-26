@@ -1,4 +1,3 @@
-
 import itertools
 from typing import List, Any
 
@@ -37,7 +36,7 @@ def populate_product(layers: List[List[Any]], val: Any) -> dict:
     Example
     -------
 
-    Set layers: 
+    Set layers:
 
     >>> animal = ["cat", "dog"]
     >>> food = ["strawberry", "cucumber"]
@@ -47,7 +46,7 @@ def populate_product(layers: List[List[Any]], val: Any) -> dict:
     Create and populate dict with the value "edibility" value `False`:
 
     >>> populate_product(
-    >>>     layers=layers, 
+    >>>     layers=layers,
     >>>     val=False
     >>> )
     {'cat': {'strawberry': {'cold': False, 'warm': False},
@@ -57,8 +56,9 @@ def populate_product(layers: List[List[Any]], val: Any) -> dict:
 
     """
 
-    assert all([len(l) > 0 for l in layers]), \
-        "All layers must have a positive number of keys (list elements)."
+    assert all(
+        [len(layer) > 0 for layer in layers]
+    ), "All layers must have a positive number of keys (list elements)."
 
     combinations = list(itertools.product(*layers))
 
@@ -75,6 +75,6 @@ def populate_product(layers: List[List[Any]], val: Any) -> dict:
             obj=nested_dict,
             attr=attr,
             value=val,
-            make_missing=True
+            make_missing=True,
         )
     return nested_dict

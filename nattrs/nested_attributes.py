@@ -1,4 +1,3 @@
-
 from functools import partial
 from typing import Callable, Union, Any
 
@@ -12,7 +11,12 @@ from typing import Callable, Union, Any
 # TODO For getattr -> allow different default for leaf
 
 
-def nested_getattr(obj: Union[object, dict], attr: str, default: Any = None, allow_none: bool = False):
+def nested_getattr(
+    obj: Union[object, dict],
+    attr: str,
+    default: Any = None,
+    allow_none: bool = False,
+):
     """
     Get object attributes/dict members recursively, given by dot-separated names.
 
@@ -24,7 +28,7 @@ def nested_getattr(obj: Union[object, dict], attr: str, default: Any = None, all
         The object/dict to get attributes/members of.
         These work interchangeably, why "class, dict, class" work as well.
     attr : str
-        The string specifying the dot-separated names of attributes/members to get. 
+        The string specifying the dot-separated names of attributes/members to get.
         The most left name is an attribute/dict member of `obj`
         which has the attribute/key given by the second most left name,
         which has the attribute/key given by the third most left name,
@@ -82,8 +86,8 @@ def _nested_getattr(obj: Union[object, dict], attr: str, default: Any = None):
         return obj
     getter = _dict_getter if isinstance(obj, dict) else getattr
     try:
-        left, right = attr.split('.', 1)
-    except:
+        left, right = attr.split(".", 1)
+    except:  # noqa: E722
         return getter(obj, attr, default)
     return _nested_getattr(getter(obj, left, default), right, default)
 
@@ -154,13 +158,15 @@ def _nested_hasattr(obj: Union[object, dict], attr: str):
     getter = _dict_getter if isinstance(obj, dict) else getattr
     has_checker = _dict_has if isinstance(obj, dict) else hasattr
     try:
-        left, right = attr.split('.', 1)
-    except:
+        left, right = attr.split(".", 1)
+    except:  # noqa: E722
         return has_checker(obj, attr)
     return _nested_hasattr(getter(obj, left, None), right)
 
 
-def nested_setattr(obj: Union[object, dict], attr: str, value: Any, make_missing: bool = False) -> None:
+def nested_setattr(
+    obj: Union[object, dict], attr: str, value: Any, make_missing: bool = False
+) -> None:
     """
     Set object attribute/dict member by recursive lookup, given by dot-separated names.
 
@@ -174,7 +180,7 @@ def nested_setattr(obj: Union[object, dict], attr: str, value: Any, make_missing
         The object/dict to set an attribute/member of a sub-attribute/member of.
         These work interchangeably, why "class, dict, class" work as well.
     attr : str
-        The string specifying the dot-separated names of attributes/members. 
+        The string specifying the dot-separated names of attributes/members.
         The most left name is an attribute/dict member of `obj`
         which has the attribute/key given by the second most left name,
         which has the attribute/key given by the third most left name,
@@ -183,7 +189,7 @@ def nested_setattr(obj: Union[object, dict], attr: str, value: Any, make_missing
     value : Any
         Value to set for the final attribute/member.
     make_missing : bool
-        Whether to create a dict for non-existent intermediate attributes/keys. 
+        Whether to create a dict for non-existent intermediate attributes/keys.
         Otherwise, the function will raise an error.
 
     Examples
@@ -211,23 +217,28 @@ def nested_setattr(obj: Union[object, dict], attr: str, value: Any, make_missing
     2
     """
 
-    getter = partial(_dict_getter, default="make" if make_missing else "raise") \
-        if isinstance(obj, dict) else (get_or_make_attr if make_missing else getattr)
+    getter = (
+        partial(_dict_getter, default="make" if make_missing else "raise")
+        if isinstance(obj, dict)
+        else (get_or_make_attr if make_missing else getattr)
+    )
     setter = _dict_setter if isinstance(obj, dict) else setattr
     try:
-        left, right = attr.split('.', 1)
-    except:
+        left, right = attr.split(".", 1)
+    except:  # noqa: E722
         setter(obj, attr, value)
         return
     nested_setattr(
-        obj=getter(obj, left),
-        attr=right,
-        value=value,
-        make_missing=make_missing
+        obj=getter(obj, left), attr=right, value=value, make_missing=make_missing
     )
 
 
-def nested_mutattr(obj: Union[object, dict], attr: str, fn: Callable, is_inplace_fn: bool = False) -> None:
+def nested_mutattr(
+    obj: Union[object, dict],
+    attr: str,
+    fn: Callable,
+    is_inplace_fn: bool = False,
+) -> None:
     """
     Mutate object attribute/dict member by recursive lookup, given by dot-separated names.
 
@@ -239,17 +250,17 @@ def nested_mutattr(obj: Union[object, dict], attr: str, fn: Callable, is_inplace
         The object/dict to mutate an attribute/member of a sub-attribute/member of.
         These work interchangeably, why "class, dict, class" work as well.
     attr : str
-        The string specifying the dot-separated names of attributes/members. 
+        The string specifying the dot-separated names of attributes/members.
         The most left name is an attribute/dict member of `obj`
         which has the attribute/key given by the second most left name,
         which has the attribute/key given by the third most left name,
         and so on. The last name may be non-existent and is the name
         of the attribute/member to set.
     fn : Callable
-        Function that gets existing attribute/key value and 
+        Function that gets existing attribute/key value and
         returns the new value to be assigned.
     is_inplace_fn : bool
-        Whether `fn` affects the attribute inplace. In this case, 
+        Whether `fn` affects the attribute inplace. In this case,
         no output is expected (and is ignored), as we expect the
         function to have made the relevant change when applied.
         E.g. useful for `numpy.ndarrays` that we do not
@@ -295,6 +306,7 @@ def nested_mutattr(obj: Union[object, dict], attr: str, fn: Callable, is_inplace
 
 
 #### Getter/Setter/Checker utils ####
+
 
 def get_or_make_attr(__o: object, __name: str):
     if not hasattr(__o, __name):

@@ -1,17 +1,19 @@
-
 import pytest
 
-from nattrs.nested_attributes import nested_getattr, nested_hasattr, nested_mutattr, nested_setattr
+from nattrs.nested_attributes import (
+    nested_getattr,
+    nested_hasattr,
+    nested_mutattr,
+    nested_setattr,
+)
 
 
 def test_nested_getattr_examples():
-
     # Create class 'B' with a dict 'c' with the member 'd'
     class B:
         def __init__(self):
-            self.c = {
-                "d": 1
-            }
+            self.c = {"d": 1}
+
     # Add to a dict 'a'
     a = {"b": B()}
 
@@ -28,13 +30,11 @@ def test_nested_getattr_examples():
 
 
 def test_nested_hasattr_examples():
-
     # Create class 'B' with a dict 'c' with the member 'd'
     class B:
         def __init__(self):
-            self.c = {
-                "d": 1
-            }
+            self.c = {"d": 1}
+
     # Add to a dict 'a'
     a = {"b": B()}
 
@@ -51,13 +51,11 @@ def test_nested_hasattr_examples():
 
 
 def test_nested_setattr_examples():
-
     # Create class 'B' with a dict 'c' with the member 'd'
     class B:
         def __init__(self):
-            self.c = {
-                "d": 1
-            }
+            self.c = {"d": 1}
+
     # Add to a dict 'a'
     a = {"b": B()}
 
@@ -76,18 +74,13 @@ def test_nested_setattr_examples():
 
 
 def test_nested_mutattr_examples():
-
     # Create class 'B' with a dict 'c' with the member 'd'
     class B:
         def __init__(self):
-            self.c = {
-                "d": 1
-            }
+            self.c = {"d": 1}
+
     # Add to a dict 'a'
-    a = {
-        "b": B(),
-        "o": {"n": [0, 1, 2, 3, 4, 5]}
-    }
+    a = {"b": B(), "o": {"n": [0, 1, 2, 3, 4, 5]}}
 
     # Set the value of 'd'
     nested_mutattr(a, "b.c.d", lambda x: x * 5)
@@ -95,10 +88,7 @@ def test_nested_mutattr_examples():
     assert nested_getattr(a, "b.c.d") == 5
 
     # Apply function to list of integers
-    nested_mutattr(
-        a, "o.n", lambda xs: [xi + 3 for xi in xs],
-        is_inplace_fn=False
-    )
+    nested_mutattr(a, "o.n", lambda xs: [xi + 3 for xi in xs], is_inplace_fn=False)
     # Check new value of n
     assert nested_getattr(a, "o.n") == [3, 4, 5, 6, 7, 8]
 
@@ -107,10 +97,7 @@ def test_nested_mutattr_examples():
         del d["n"]
 
     # Apply inplace function to dict
-    nested_mutattr(
-        a, "o", change_dict,
-        is_inplace_fn=True
-    )
+    nested_mutattr(a, "o", change_dict, is_inplace_fn=True)
 
     # Check new value of p
     assert list(nested_getattr(a, "o").keys()) == ["p"]

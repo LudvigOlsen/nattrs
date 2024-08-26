@@ -4,8 +4,6 @@ nattrs
 **Nested attributes** utility functions for python. Allows getting/setting of object attributes and dict members interchangeably.
 Useful to populate nested dicts for storing outputs of a loop.
 
-Alpha stage. Subject to change.
-
 > https://pypi.python.org/pypi/nattrs/     
 
 
@@ -26,13 +24,13 @@ python -m pip install git+https://github.com/ludvigolsen/nattrs
 
 # Main functions
 
-| Class/Function   | Description |
-|:-----------------|:------------|
-| `nested_getattr` | Get object attributes/dict members recursively, given by dot-separated names |
-| `nested_setattr` | Set object attribute/dict member by recursive lookup, given by dot-separated names. |
-| `nested_mutattr` | Apply function (mutate) to object attribute/dict member by recursive lookup, given by dot-separated names. |
-| `nested_hasattr` | Check whether recursive object attributes/dict members exist. |
-| `populate_product` | Create and populate nested dicts with specified layers and the same leaf value. |
+| Class/Function     | Description                                                                                                |
+| :----------------- | :--------------------------------------------------------------------------------------------------------- |
+| `nested_getattr`   | Get object attributes/dict members recursively, given by dot-separated names                               |
+| `nested_setattr`   | Set object attribute/dict member by recursive lookup, given by dot-separated names.                        |
+| `nested_mutattr`   | Apply function (mutate) to object attribute/dict member by recursive lookup, given by dot-separated names. |
+| `nested_hasattr`   | Check whether recursive object attributes/dict members exist.                                              |
+| `populate_product` | Create and populate nested dicts with specified layers and the same leaf value.                            |
 
 
 # Examples

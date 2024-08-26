@@ -1,6 +1,10 @@
 Changelog
 --------
 
+v0.1.3 (xx-2024)
+
+ - Adds `__version__` variable to package.
+
 v0.1.2 (07-2024)
  - Handles `zipp` vulnerability.
  - Now requires `Python==3.8` or newer.
