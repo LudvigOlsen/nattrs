@@ -1,5 +1,6 @@
 from functools import partial
 from typing import Callable, Union, Any
+from collections.abc import Mapping, MutableMapping
 
 # TODO Add tests
 # TODO What if keys have dots in them? Add escaping of dots somehow?
@@ -12,7 +13,7 @@ from typing import Callable, Union, Any
 
 
 def nested_getattr(
-    obj: Union[object, dict],
+    obj: Union[object, Mapping],
     attr: str,
     default: Any = None,
     allow_none: bool = False,
@@ -24,7 +25,7 @@ def nested_getattr(
 
     Parameters
     ----------
-    obj : object (class instance) or dict
+    obj : object (class instance) or dict-like
         The object/dict to get attributes/members of.
         These work interchangeably, why "class, dict, class" work as well.
     attr : str
@@ -77,14 +78,14 @@ def nested_getattr(
     return _nested_getattr(obj=obj, attr=attr, default=default)
 
 
-def _nested_getattr(obj: Union[object, dict], attr: str, default: Any = None):
+def _nested_getattr(obj: Union[object, Mapping], attr: str, default: Any = None):
     """
     Inspired by:
     https://programanddesign.com/python-2/recursive-getsethas-attr/
     """
     if obj is None:
         return obj
-    getter = _dict_getter if isinstance(obj, dict) else getattr
+    getter = _dict_getter if isinstance(obj, Mapping) else getattr
     try:
         left, right = attr.split(".", 1)
     except:  # noqa: E722
@@ -92,7 +93,7 @@ def _nested_getattr(obj: Union[object, dict], attr: str, default: Any = None):
     return _nested_getattr(getter(obj, left, default), right, default)
 
 
-def nested_hasattr(obj: Union[object, dict], attr: str, allow_none: bool = False):
+def nested_hasattr(obj: Union[object, Mapping], attr: str, allow_none: bool = False):
     """
     Check whether recursive object attributes/dict members exist.
 
@@ -100,7 +101,7 @@ def nested_hasattr(obj: Union[object, dict], attr: str, allow_none: bool = False
 
     Parameters
     ----------
-    obj : object (class instance) or dict
+    obj : object (class instance) or dict-like
         The object/dict to check attributes/members of.
         These work interchangeably, why "class, dict, class" work as well.
     attr : str
@@ -148,15 +149,15 @@ def nested_hasattr(obj: Union[object, dict], attr: str, allow_none: bool = False
     return _nested_hasattr(obj=obj, attr=attr)
 
 
-def _nested_hasattr(obj: Union[object, dict], attr: str):
+def _nested_hasattr(obj: Union[object, Mapping], attr: str):
     """
     Inspired by:
     https://programanddesign.com/python-2/recursive-getsethas-attr/
     """
     if obj is None:
         return False
-    getter = _dict_getter if isinstance(obj, dict) else getattr
-    has_checker = _dict_has if isinstance(obj, dict) else hasattr
+    getter = _dict_getter if isinstance(obj, Mapping) else getattr
+    has_checker = _dict_has if isinstance(obj, Mapping) else hasattr
     try:
         left, right = attr.split(".", 1)
     except:  # noqa: E722
@@ -165,7 +166,10 @@ def _nested_hasattr(obj: Union[object, dict], attr: str):
 
 
 def nested_setattr(
-    obj: Union[object, dict], attr: str, value: Any, make_missing: bool = False
+    obj: Union[object, MutableMapping],
+    attr: str,
+    value: Any,
+    make_missing: bool = False,
 ) -> None:
     """
     Set object attribute/dict member by recursive lookup, given by dot-separated names.
@@ -176,7 +180,7 @@ def nested_setattr(
 
     Parameters
     ----------
-    obj : object (class instance) or dict
+    obj : object (class instance) or dict-like
         The object/dict to set an attribute/member of a sub-attribute/member of.
         These work interchangeably, why "class, dict, class" work as well.
     attr : str
@@ -219,22 +223,25 @@ def nested_setattr(
 
     getter = (
         partial(_dict_getter, default="make" if make_missing else "raise")
-        if isinstance(obj, dict)
+        if isinstance(obj, Mapping)
         else (get_or_make_attr if make_missing else getattr)
     )
-    setter = _dict_setter if isinstance(obj, dict) else setattr
+    setter = _dict_setter if isinstance(obj, Mapping) else setattr
     try:
         left, right = attr.split(".", 1)
     except:  # noqa: E722
         setter(obj, attr, value)
         return
     nested_setattr(
-        obj=getter(obj, left), attr=right, value=value, make_missing=make_missing
+        obj=getter(obj, left),
+        attr=right,
+        value=value,
+        make_missing=make_missing,
     )
 
 
 def nested_mutattr(
-    obj: Union[object, dict],
+    obj: Union[object, MutableMapping],
     attr: str,
     fn: Callable,
     is_inplace_fn: bool = False,
@@ -246,7 +253,7 @@ def nested_mutattr(
 
     Parameters
     ----------
-    obj : object (class instance) or dict
+    obj : object (class instance) or dict-like
         The object/dict to mutate an attribute/member of a sub-attribute/member of.
         These work interchangeably, why "class, dict, class" work as well.
     attr : str
@@ -314,7 +321,7 @@ def get_or_make_attr(__o: object, __name: str):
     return getattr(__o, __name)
 
 
-def _dict_getter(obj: dict, key: Any, default: Any):
+def _dict_getter(obj: Mapping, key: Any, default: Any):
     if isinstance(default, str):
         if default == "raise":
             return obj[key]
@@ -325,9 +332,9 @@ def _dict_getter(obj: dict, key: Any, default: Any):
     return obj.get(key, default)
 
 
-def _dict_setter(obj: dict, key: Any, val: Any):
+def _dict_setter(obj: MutableMapping, key: Any, val: Any):
     obj[key] = val
 
 
-def _dict_has(obj: dict, key: Any):
+def _dict_has(obj: Mapping, key: Any):
     return key in obj

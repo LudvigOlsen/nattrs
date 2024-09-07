@@ -4,6 +4,8 @@ Changelog
 v0.1.xx (xx-2024)
 
  - Adds `__version__` variable to package.
+ - Changes type hints from `dict` to `Mapping` and `MutableMapping` 
+   since the functions should work for those in general. 
 
 v0.1.2 (07-2024)
  - Handles `zipp` vulnerability.
