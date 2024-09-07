@@ -4,7 +4,9 @@ nattrs
 **Nested attributes** utility functions for python. Allows getting/setting of object attributes and dict members interchangeably.
 Useful to populate nested dicts for storing outputs of a loop.
 
-The functions should work with any dict type (i.e. `Mapping` / `MutableMapping`).
+The functions should work with most dict types (i.e. `Mapping` / `MutableMapping`) and classes.
+
+Tip: Attribute names can be found using regular expressions.
 
 > https://pypi.python.org/pypi/nattrs/     
 
@@ -31,6 +33,7 @@ python -m pip install git+https://github.com/ludvigolsen/nattrs
 | `nested_getattr`   | Get object attributes/dict members recursively, given by dot-separated names                               |
 | `nested_setattr`   | Set object attribute/dict member by recursive lookup, given by dot-separated names.                        |
 | `nested_mutattr`   | Apply function (mutate) to object attribute/dict member by recursive lookup, given by dot-separated names. |
+| `nested_updattr`   | Update dict / class.__dict__ of attributes recursively, given by dot-separated names.                      |
 | `nested_hasattr`   | Check whether recursive object attributes/dict members exist.                                              |
 | `populate_product` | Create and populate nested dicts with specified layers and the same leaf value.                            |
 
@@ -116,6 +119,28 @@ nested_getattr(a, "b.c.d")
 ```
 
 Note: If your function performs the assignment *in-place*, remember to enable the `is_inplace_fn` argument.
+
+## nested_updattr
+
+Update `d` with a dictionary:
+
+```python
+
+nested_updattr(a, "b.c.d", {"d": 3})
+
+```
+
+Check new value of `d`:
+
+```python
+
+nested_getattr(a, "b.c.d")
+>> 3
+
+```
+
+Note: Also work on `class.__dict__` dicts.
+
 
 ## nested_hasattr
 
