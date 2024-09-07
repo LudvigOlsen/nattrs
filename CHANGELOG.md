@@ -1,7 +1,7 @@
 Changelog
 --------
 
-v0.2.1 (09-2024)
+v0.2.2 (09-2024)
 
  - Fixes path to hexagon badge when viewing outside of GitHub.
 
