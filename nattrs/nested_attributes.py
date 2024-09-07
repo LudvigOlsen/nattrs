@@ -328,7 +328,7 @@ def _nested_hasattr(obj: Union[object, Mapping], attr: str):
 
 
 def nested_setattr(
-    obj: Union[object, MutableMapping],
+    obj: Union[object, Mapping],
     attr: str,
     value: Any,
     make_missing: bool = False,
@@ -409,7 +409,7 @@ def nested_setattr(
 
 
 def nested_mutattr(
-    obj: Union[object, MutableMapping],
+    obj: Union[object, Mapping],
     attr: str,
     fn: Callable,
     is_inplace_fn: bool = False,

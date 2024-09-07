@@ -7,6 +7,8 @@ v0.1.xx (xx-2024)
    expression to get attribute names / dict keys.
  - Adds `getter_default` argument to `nested_mutattr()` to allow 
    better handling of missing attributes.
+ - Removes mutability requirements from type hints when they are
+   unnecessary (only the sub object/Mapping needs to by mutable).
 
 v0.1.3 (09-2024)
 
