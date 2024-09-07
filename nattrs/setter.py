@@ -13,7 +13,7 @@ def nested_setattr(
     regex: bool = False,
 ) -> None:
     """
-    Set object attribute/dict member by recursive lookup, given by dot-separated names.
+    Set object attribute / dict member by recursive lookup, given by dot-separated names.
 
     Pass `attr='x.a.o'` to set attribute "o" of attribute "a" of attribute "x".
 

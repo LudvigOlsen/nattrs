@@ -11,7 +11,7 @@ def nested_hasattr(
     regex: bool = False,
 ):
     """
-    Check whether recursive object attributes/dict members exist.
+    Check whether recursive object attributes / dict members exist.
 
     Pass `attr='x.a.o'` to check attribute "o" of attribute "a" of attribute "x".
 

@@ -3,6 +3,8 @@ Changelog
 
 v0.1.xx (xx-2024)
 
+ - Adds `nested_updattr()` for updating dicts and `class.__dict__` of 
+   nested attributes with a `dict`.
  - Adds `regex` argument to `nested_*attr()` functions for using 
    regular expression to index attribute names / dict keys.
  - Adds `getter_default` argument to `nested_mutattr()` to allow 

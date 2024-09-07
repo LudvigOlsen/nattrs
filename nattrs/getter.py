@@ -13,7 +13,7 @@ def nested_getattr(
     regex: bool = False,
 ) -> Optional[Union[Any, Dict[str, Any]]]:
     """
-    Get object attributes/dict members recursively, given by dot-separated names.
+    Get object attributes / dict members recursively, given by dot-separated names.
 
     Pass `attr='x.a.o'` to get attribute "o" of attribute "a" of attribute "x".
 

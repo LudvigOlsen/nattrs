@@ -14,7 +14,7 @@ def nested_mutattr(
     regex: bool = False,
 ) -> None:
     """
-    Mutate object attribute/dict member by recursive lookup, given by dot-separated names.
+    Mutate object attribute / dict member by recursive lookup, given by dot-separated names.
 
     Pass `attr='x.a.o'` to mutate attribute "o" of attribute "a" of attribute "x".
 
