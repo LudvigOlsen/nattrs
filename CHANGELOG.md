@@ -1,7 +1,7 @@
 Changelog
 --------
 
-v0.1.xx (xx-2024)
+v0.1.3 (09-2024)
 
  - Adds `__version__` variable to package.
  - Changes type hints from `dict` to `Mapping` and `MutableMapping` 

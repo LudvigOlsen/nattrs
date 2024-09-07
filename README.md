@@ -4,6 +4,8 @@ nattrs
 **Nested attributes** utility functions for python. Allows getting/setting of object attributes and dict members interchangeably.
 Useful to populate nested dicts for storing outputs of a loop.
 
+The functions should work with any dict type (i.e. `Mapping` / `MutableMapping`).
+
 > https://pypi.python.org/pypi/nattrs/     
 
 
