@@ -3,6 +3,8 @@ Changelog
 
 v0.1.xx (xx-2024)
 
+ - Adds `nested_delattr()` for deleting attributes / dict members
+   in nested data structures.
  - Adds `nested_updattr()` for updating dicts and `class.__dict__` of 
    nested attributes with a `dict`.
  - Adds `regex` argument to `nested_*attr()` functions for using 

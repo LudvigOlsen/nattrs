@@ -15,11 +15,14 @@ def nested_hasattr(
 
     Pass `attr='x.a.o'` to check attribute "o" of attribute "a" of attribute "x".
 
+    Note: When the attributes / keys in `attr` themselves include dots, those need to be
+    matched with regex patterns (see `regex`).
+
     Parameters
     ----------
     obj : object (class instance) or dict-like
         The object/dict to check attributes/members of.
-        These work interchangeably, why "class, dict, class" work as well.
+        These work interchangeably, why "class, dict, class, ..." work as well.
     attr : str
         The string specifying the dot-separated names of attributes/members
         to get. The most left name is the object/dict which has
@@ -33,12 +36,19 @@ def nested_hasattr(
         Whether to interpret attribute/member names wrapped in `{}`
         as regex patterns. If one or more matches exist,
         the function returns `True`, else `False`.
-        Each regex matching is performed separately per attribute "level".
+        Each regex matching is performed separately per attribute "level"
+        (dot separated attribute name).
+
         Note: The entire attribute name must be included in the wrapper
         (i.e. the first and last character are "{" and "}"),
         otherwise the name is considered a "fixed" (non-regex)
-        name. This also means, "{" and "}" can be used within the regex.
-        Dots within "{}" are respected (i.e. not considered path splits).
+        name. Dots within "{}" are respected (i.e. not considered path splits).
+
+        To include an attribute name in `attr` that itself contains a dot,
+        use a regex like `r'{x\.y}'` (in context: `r'a.{x\.y}.c'`)
+            Remember to escape the dots in the regex or they will
+            be considered a regex symbol.
+
         NOTE: When `regex=True`, it simply calls `nested_getattr(..., regex=True)`
         and returns whether anything was found. If you want the found
         attributes, use that directly.

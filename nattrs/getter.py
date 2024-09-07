@@ -19,11 +19,14 @@ def nested_getattr(
 
     Use regular expression to get all matching attribute paths.
 
+    Note: When the attributes / keys in `attr` themselves include dots, those need to be
+    matched with regex patterns (see `regex`).
+
     Parameters
     ----------
     obj : object (class instance) or dict-like
         The object/dict to get attributes/members of.
-        These work interchangeably, why "class, dict, class" work as well.
+        These work interchangeably, why "class, dict, class, ..." work as well.
     attr : str
         The string specifying the dot-separated names of attributes/members to get.
         The most left name is an attribute/dict member of `obj`
@@ -42,12 +45,19 @@ def nested_getattr(
         Whether to interpret attribute/member names wrapped in `{}`
         as regex patterns. When multiple matches exist, all are returned
         in a list.
-        Each regex matching is performed separately per attribute "level".
+
+        Each regex matching is performed separately per attribute "level"
+        (dot separated attribute name).
+
         Note: The entire attribute name must be included in the wrapper
         (i.e. the first and last character are "{" and "}"),
         otherwise the name is considered a "fixed" (non-regex)
-        name. This also means, "{" and "}" can be used within the regex.
-        Dots within "{}" are respected (i.e. not considered path splits).
+        name.  Dots within "{}" are respected (i.e. not considered path splits).
+
+        To include an attribute name in `attr` that itself contains a dot,
+        use a regex like `r'{x\.y}'` (in context: `r'a.{x\.y}.c'`)
+            Remember to escape the dots in the regex or they will
+            be considered a regex symbol.
 
     Returns
     -------
@@ -103,10 +113,7 @@ def nested_getattr(
     # When regex-use is enabled
     if regex:
         # Extract terms for regex compilation
-        terms = [
-            a.replace(utils.DOT_PLACEHOLDER, ".")
-            for a in utils.replace_dots_in_regex(attr).split(".")
-        ]
+        terms = utils.extract_terms(attr)
         attr, regexes = utils.precompile_regexes(terms)
         matches = _regex_nested_getattrs(
             objs=[obj],
@@ -228,7 +235,9 @@ def _match_and_get_attr(
                 # Collect all matches
                 matches.append(
                     utils.MatchResult(
-                        attr_name=f"{prev_attr}.{key}" if prev_attr else key,
+                        attr_name=f"{prev_attr}.{_dotted_attr(key)}"
+                        if prev_attr
+                        else key,
                         value=getter(obj, key, default),
                     )
                 )
@@ -239,7 +248,13 @@ def _match_and_get_attr(
     # Fallback to non-regex case
     return [
         utils.MatchResult(
-            attr_name=f"{prev_attr}.{attr}" if prev_attr else attr,
+            attr_name=f"{prev_attr}.{_dotted_attr(attr)}" if prev_attr else attr,
             value=getter(obj, attr, default),
         )
     ]
+
+
+def _dotted_attr(s):
+    if "." in s:
+        return "{" + s.replace(".", r"\.") + "}"
+    return s

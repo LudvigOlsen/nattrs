@@ -1,3 +1,4 @@
+from copy import deepcopy
 import re
 import pytest
 
@@ -70,7 +71,7 @@ def test_nested_setattr_examples():
 
     # Setting nonexistent attributes with make_missing=False should not change the structure
     a = {"b": {"c": {"d": 1}}}
-    a_orig = a.copy()
+    a_orig = deepcopy(a)
     try:
         nested_setattr(a, "b.nonexistent.c", 999, make_missing=False)
     except KeyError:
@@ -174,14 +175,14 @@ def test_nested_setattr_regex():
 
     # Regex does not match, no changes made to any part
     a = {"b": {"c": {"d": 1}, "e": {"f": 2}}}
-    a_orig = a.copy()
+    a_orig = deepcopy(a)
     nested_setattr(a, "b.{x}.d", 100, regex=True)
     assert a == a_orig
     assert a["b"]["c"]["d"] == 1  # No change, as regex didn't match
     assert a["b"]["e"]["f"] == 2  # Ensure "e.f" is unaffected
 
     a = {"b": {"c": {"d": 1}, "e": {"f": 2}}}
-    a_orig = a.copy()
+    a_orig = deepcopy(a)
     try:
         nested_setattr(a, "b.{[}.d", 100, regex=True)
     except re.error:

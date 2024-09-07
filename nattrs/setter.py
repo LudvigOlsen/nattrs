@@ -22,11 +22,14 @@ def nested_setattr(
     If you want type-checking of existing values before assignment (or similar checks),
     consider using `nested_mutattr()` instead and include such checks in the mutator function.
 
+    Note: When the attributes / keys in `attr` themselves include dots, those need to be
+    matched with regex patterns (see `regex`).
+
     Parameters
     ----------
     obj : object (class instance) or dict-like
         The object/dict to set an attribute/member of a sub-attribute/member of.
-        These work interchangeably, why "class, dict, class" work as well.
+        These work interchangeably, why "class, dict, class, ..." work as well.
     attr : str
         The string specifying the dot-separated names of attributes/members.
         The most left name is an attribute/dict member of `obj`
@@ -44,15 +47,24 @@ def nested_setattr(
         Whether to interpret attribute/member names wrapped in `{}`
         as regex patterns. When multiple matches exist, they all
         get the value assigned.
-        Each regex matching is performed separately per attribute "level".
+
+        Each regex matching is performed separately per attribute "level"
+        (dot separated attribute name).
+
         Note: The entire attribute name must be included in the wrapper
         (i.e. the first and last character are "{" and "}"),
         otherwise the name is considered a "fixed" (non-regex)
-        name. This also means, "{" and "}" can be used within the regex.
-        Dots within "{}" are respected (i.e. not considered path splits).
+        name. Dots within "{}" are respected (i.e. not considered path splits).
+        
         Note that `make_missing` won't work on attribute names that are
         specified as regex patterns and will fail instead (what would
         be the key?). It will still work on the non-regex names.
+
+        To include an attribute name in `attr` that itself contains a dot,
+        use a regex like `r'{x\.y}'` (in context: `r'a.{x\.y}.c'`)
+            Remember to escape the dots in the regex or they will
+            be considered a regex symbol.
+
 
     Examples
     --------

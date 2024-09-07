@@ -86,6 +86,13 @@ def precompile_regexes(terms: List[str]) -> Tuple[str, Dict[str, re.Pattern]]:
     return modified_attr, regexes
 
 
+def extract_terms(attr: str):
+    return [
+        term.replace(DOT_PLACEHOLDER, ".")
+        for term in replace_dots_in_regex(attr).split(".")
+    ]
+
+
 class Ignore:
     """
     Class for indicating that a value

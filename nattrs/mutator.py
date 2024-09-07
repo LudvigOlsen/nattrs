@@ -26,11 +26,14 @@ def nested_mutattr(
     Tip: The mutating function can perform checks of typing (e.g. consistency between
     the new and original values) or similar.
 
+    Note: When the attributes / keys in `attr` themselves include dots, those need to be
+    matched with regex patterns (see `regex`).
+
     Parameters
     ----------
     obj : object (class instance) or dict-like
         The object/dict to mutate an attribute/member of a sub-attribute/member of.
-        These work interchangeably, why "class, dict, class" work as well.
+        These work interchangeably, why "class, dict, class, ..." work as well.
     attr : str
         The string specifying the dot-separated names of attributes/members.
         The most left name is an attribute/dict member of `obj`
@@ -63,12 +66,19 @@ def nested_mutattr(
         Whether to interpret attribute/member names wrapped in `{}`
         as regex patterns. When multiple matches exist, they all
         get mutated.
-        Each regex matching is performed separately per attribute "level".
+
+        Each regex matching is performed separately per attribute "level"
+        (dot separated attribute name).
+
         Note: The entire attribute name must be included in the wrapper
         (i.e. the first and last character are "{" and "}"),
         otherwise the name is considered a "fixed" (non-regex)
-        name. This also means, "{" and "}" can be used within the regex.
-        Dots within "{}" are respected (i.e. not considered path splits).
+        name. Dots within "{}" are respected (i.e. not considered path splits).
+
+        To include an attribute name in `attr` that itself contains a dot,
+        use a regex like `r'{x\.y}'` (in context: `r'a.{x\.y}.c'`)
+            Remember to escape the dots in the regex or they will
+            be considered a regex symbol.
 
     Examples
     --------
@@ -184,4 +194,9 @@ def _regex_nested_mutattrs(
         )
     if not is_inplace_fn:
         for path, new_val in new_vals.items():
-            nested_setattr(obj=obj, attr=path, value=new_val)
+            nested_setattr(
+                obj=obj,
+                attr=path,
+                value=new_val,
+                regex="{" in path,
+            )

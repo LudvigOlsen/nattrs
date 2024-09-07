@@ -6,12 +6,18 @@ from nattrs.utils import Ignore
 
 
 def nested_updattr(
-    obj: Union[object, Mapping], attr: str, update_dict: Dict, regex: bool = False
+    obj: Union[object, Mapping],
+    attr: str,
+    update_dict: Dict,
+    regex: bool = False,
 ) -> None:
     """
     Update object attribute / dict member by recursive lookup.
 
     Pass `attr='x.a.o'` to update the attribute "o" of attribute "a" of attribute "x".
+
+    Note: When the attributes / keys in `attr` themselves include dots, those need to be
+    matched with regex patterns (see `regex`).
 
     Parameters
     ----------
@@ -28,12 +34,19 @@ def nested_updattr(
         Whether to interpret attribute/member names wrapped in `{}`
         as regex patterns. When multiple matches exist, they all
         get updated. Overall non-existing matches are ignored.
-        Each regex matching is performed separately per attribute "level".
+
+        Each regex matching is performed separately per attribute "level"
+        (dot separated attribute name).
+
         Note: The entire attribute name must be included in the wrapper
         (i.e. the first and last character are "{" and "}"),
         otherwise the name is considered a "fixed" (non-regex)
-        name. This also means, "{" and "}" can be used within the regex.
-        Dots within "{}" are respected (i.e. not considered path splits).
+        name. Dots within "{}" are respected (i.e. not considered path splits).
+
+        To include an attribute name in `attr` that itself contains a dot,
+        use a regex like `r'{x\.y}'` (in context: `r'a.{x\.y}.c'`)
+            Remember to escape the dots in the regex or they will
+            be considered a regex symbol.
     """
 
     if not isinstance(update_dict, Mapping):
