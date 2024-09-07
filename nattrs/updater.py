@@ -11,7 +11,7 @@ def nested_updattr(
     update_dict: Dict,
     regex: bool = False,
 ) -> None:
-    """
+    r"""
     Update object attribute / dict member by recursive lookup.
 
     Pass `attr='x.a.o'` to update the attribute "o" of attribute "a" of attribute "x".

@@ -10,7 +10,7 @@ def nested_delattr(
     regex: bool = False,
     allow_missing: bool = True,
 ) -> None:
-    """
+    r"""
     Delete object attribute / dict member by recursive lookup, given by dot-separated names.
 
     Pass `attr='x.a.o'` to delete attribute "o" of attribute "a" of attribute "x".

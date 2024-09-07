@@ -10,7 +10,7 @@ def nested_hasattr(
     allow_none: bool = False,
     regex: bool = False,
 ):
-    """
+    r"""
     Check whether recursive object attributes / dict members exist.
 
     Pass `attr='x.a.o'` to check attribute "o" of attribute "a" of attribute "x".

@@ -12,7 +12,7 @@ def nested_setattr(
     make_missing: bool = False,
     regex: bool = False,
 ) -> None:
-    """
+    r"""
     Set object attribute / dict member by recursive lookup, given by dot-separated names.
 
     Pass `attr='x.a.o'` to set attribute "o" of attribute "a" of attribute "x".
@@ -55,7 +55,7 @@ def nested_setattr(
         (i.e. the first and last character are "{" and "}"),
         otherwise the name is considered a "fixed" (non-regex)
         name. Dots within "{}" are respected (i.e. not considered path splits).
-        
+
         Note that `make_missing` won't work on attribute names that are
         specified as regex patterns and will fail instead (what would
         be the key?). It will still work on the non-regex names.

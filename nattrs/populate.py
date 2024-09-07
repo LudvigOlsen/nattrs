@@ -9,7 +9,7 @@ from nattrs.setter import nested_setattr
 
 
 def populate_product(layers: List[List[Any]], val: Any) -> dict:
-    """
+    r"""
     Create and populate a dict with layers of dicts
     with all leafs having the same value (e.g. an empty list).
 
