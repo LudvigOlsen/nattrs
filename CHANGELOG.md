@@ -1,6 +1,10 @@
 Changelog
 --------
 
+v0.2.1 (09-2024)
+
+ - Fixes path to hexagon badge when viewing outside of GitHub.
+
 v0.2.0 (09-2024)
 
  - Adds `nested_delattr()` for deleting attributes / dict members
