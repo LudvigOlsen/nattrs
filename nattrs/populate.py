@@ -1,7 +1,7 @@
 import itertools
 from typing import List, Any
 
-from nattrs.nested_attributes import nested_setattr
+from nattrs.setter import nested_setattr
 
 # TODO Improve documentation
 # TODO What if keys have dots in them? This *could* actually be a feature allowing
