@@ -165,7 +165,7 @@ nested_hasattr(a, "b.o.p")
 
 ## nested_delattr
 
-Check presence of the member 'd':
+Delete the member 'd':
 
 ```python
 
