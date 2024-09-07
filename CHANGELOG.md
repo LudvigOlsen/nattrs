@@ -1,7 +1,7 @@
 Changelog
 --------
 
-v0.1.xx (xx-2024)
+v0.2.0 (09-2024)
 
  - Adds `nested_delattr()` for deleting attributes / dict members
    in nested data structures.
@@ -15,6 +15,7 @@ v0.1.xx (xx-2024)
    and `getter_default` in `nested_mutattr()`.
  - Removes mutability requirements from type hints when they are
    unnecessary (only the sub object/Mapping needs to by mutable).
+ - Adds hexagon bagde.
 
 v0.1.3 (09-2024)
 
