@@ -38,13 +38,17 @@ def nested_setattr(
         Value to set for the final attribute/member.
     make_missing : bool
         Whether to create a dict for non-existent intermediate attributes/keys.
-        Otherwise, the function will raise an error.
+        Otherwise, the function will raise either an `AttributeError`
+        or a `KeyError` based on the data structure.
     regex : bool
         Whether to interpret attribute/member names wrapped in `{}`
         as regex patterns. When multiple matches exist, they all
-        get the value assigned. Note: The entire attribute name must be included
-        in the wrapper, otherwise the name is considered a "fixed" (non-regex)
-        name. This means, "{" and "}" can be used within the regex.
+        get the value assigned.
+        Each regex matching is performed separately per attribute "level".
+        Note: The entire attribute name must be included in the wrapper
+        (i.e. the first and last character are "{" and "}"),
+        otherwise the name is considered a "fixed" (non-regex)
+        name. This also means, "{" and "}" can be used within the regex.
         Dots within "{}" are respected (i.e. not considered path splits).
         Note that `make_missing` won't work on attribute names that are
         specified as regex patterns and will fail instead (what would
@@ -82,6 +86,13 @@ def nested_setattr(
 
     >>> nested_getattr(a, "b.c.d")
     5
+
+    Set value if it exists or ignore error otherwise:
+    >>> try:
+    >>>     nested_setattr(a, "b.c.o", "Never set")
+    >>> except ValueError:
+    >>>     pass
+
     """
 
     if regex:

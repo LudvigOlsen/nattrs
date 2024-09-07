@@ -1,9 +1,15 @@
 from typing import Union
 from collections.abc import Mapping
+from nattrs.getter import nested_getattr
 import nattrs.utils as utils
 
 
-def nested_hasattr(obj: Union[object, Mapping], attr: str, allow_none: bool = False):
+def nested_hasattr(
+    obj: Union[object, Mapping],
+    attr: str,
+    allow_none: bool = False,
+    regex: bool = False,
+):
     """
     Check whether recursive object attributes/dict members exist.
 
@@ -23,11 +29,24 @@ def nested_hasattr(obj: Union[object, Mapping], attr: str, allow_none: bool = Fa
     allow_none : bool
         Whether to allow `obj` to be `None` (in the first call - non-recursively).
         When allowed, such a call would return `False`.
+    regex : bool
+        Whether to interpret attribute/member names wrapped in `{}`
+        as regex patterns. If one or more matches exist,
+        the function returns `True`, else `False`.
+        Each regex matching is performed separately per attribute "level".
+        Note: The entire attribute name must be included in the wrapper
+        (i.e. the first and last character are "{" and "}"),
+        otherwise the name is considered a "fixed" (non-regex)
+        name. This also means, "{" and "}" can be used within the regex.
+        Dots within "{}" are respected (i.e. not considered path splits).
+        NOTE: When `regex=True`, it simply calls `nested_getattr(..., regex=True)`
+        and returns whether anything was found. If you want the found
+        attributes, use that directly.
 
     Returns
     -------
     bool
-        Whether the final attribute/dict member exist.
+        Whether (one of) the final attribute/dict member(s) exist.
 
     Examples
     --------
@@ -53,9 +72,28 @@ def nested_hasattr(obj: Union[object, Mapping], attr: str, allow_none: bool = Fa
 
     >>> nested_hasattr(a, "b.o.p")
     False
+
+    Using regex to find attribute names / dict keys:
+
+    >>> nested_hasattr(a, "b.{.*}.d", regex=True)
+    True
+
+    >>> nested_hasattr(a, "b.{.*}.r", regex=True)
+    False
     """
     if not allow_none and obj is None:
         raise TypeError("`obj` was `None`.")
+    if regex:
+        matches = nested_getattr(
+            obj,
+            attr,
+            default=utils.MissingAttr(),
+            regex=True,
+        )
+        return bool(
+            [m for m in matches.values() if not isinstance(m, utils.MissingAttr)]
+        )
+
     return _nested_hasattr(obj=obj, attr=attr)
 
 

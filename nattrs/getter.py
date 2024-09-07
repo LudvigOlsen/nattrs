@@ -1,6 +1,7 @@
 import re
 from typing import Callable, Dict, List, Optional, Union, Any
 from collections.abc import Mapping
+from nattrs.utils import Ignore
 import nattrs.utils as utils
 
 
@@ -31,16 +32,21 @@ def nested_getattr(
         and so on.
     default : Any
         Value to return when one or more of the attributes were not found.
-        NOTE: ignored when `regex=True` in which case an empty dict is the default.
+        When `regex=True` and you don't want a value for the non-existent
+        attributes, pass `default=nattrs.Ignore()` which will be excluded
+        from the output. For `regex=False`, any value is simply returned.
     allow_none : bool
         Whether to allow `obj` to be `None` (in the first call - non-recursively).
         When allowed, such a call would return `None`.
     regex : bool
         Whether to interpret attribute/member names wrapped in `{}`
         as regex patterns. When multiple matches exist, all are returned
-        in a list. Note: The entire attribute name must be included
-        in the wrapper, otherwise the name is considered a "fixed" (non-regex)
-        name. This means, "{" and "}" can be used within the regex.
+        in a list.
+        Each regex matching is performed separately per attribute "level".
+        Note: The entire attribute name must be included in the wrapper
+        (i.e. the first and last character are "{" and "}"),
+        otherwise the name is considered a "fixed" (non-regex)
+        name. This also means, "{" and "}" can be used within the regex.
         Dots within "{}" are respected (i.e. not considered path splits).
 
     Returns
@@ -49,16 +55,14 @@ def nested_getattr(
         When `obj` is `None` and `allow_none` is `True`: `None`
 
         When `regex=False`: Any
-            One/more of:
+            One of:
                 - The value of the final attribute/dict member.
                 - The default value
 
         When `regex=True`: Dict[str, Any]
-            Dict mapping matching attribute paths to the value of
-            their final attribute/dict members.
-            When no matches were found, an empty dict is returned.
-
-
+            Dict mapping matching attribute paths to one of:
+                - The respective value of the final attribute/dict member.
+                - The default value (except `nattrs.Ignore()` which are excluded).
 
     Examples
     --------
@@ -108,12 +112,19 @@ def nested_getattr(
             objs=[obj],
             attr=attr,
             regexes=regexes,
-            default=None,
+            default=utils.MissingAttr(),
         )
+
+        def _replace_missing(val):
+            if isinstance(val, utils.MissingAttr):
+                return default
+            return val
+
         return {
-            match.attr_name: match.value
+            match.attr_name: _replace_missing(match.value)
             for match in utils.flatten_matches(matches)
             if isinstance(match, utils.MatchResult)
+            and not isinstance(_replace_missing(match.value), Ignore)
         }
 
     # Separate method for non-regex version (faster, simpler)
@@ -139,7 +150,7 @@ def _regex_nested_getattrs(
     objs: List[Union[object, Mapping]],
     attr: str,
     regexes: Dict[str, re.Pattern],
-    default: Any = None,
+    default: Any,
 ):
     return [
         _regex_nested_getattr(
@@ -156,12 +167,14 @@ def _regex_nested_getattr(
     obj: Union[object, Mapping],
     attr: str,
     regexes: Dict[str, re.Pattern],
-    default: Any = None,
+    default: Any,
 ):
     prev_attr = ""
     if isinstance(obj, utils.MatchResult):
         prev_attr = obj.attr_name
         obj = obj.value
+    if isinstance(obj, utils.MissingAttr):
+        return [utils.MissingAttr()]
     if obj is None:
         return [None]
 

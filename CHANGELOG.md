@@ -3,10 +3,12 @@ Changelog
 
 v0.1.xx (xx-2024)
 
- - Adds `regex` argument to `nested_getattr()` for using regular
-   expression to get attribute names / dict keys.
+ - Adds `regex` argument to `nested_*attr()` functions for using 
+   regular expression to index attribute names / dict keys.
  - Adds `getter_default` argument to `nested_mutattr()` to allow 
    better handling of missing attributes.
+ - Adds `Ignore()` class to use as `default` value in `nested_getattr()`
+   and `getter_default` in `nested_mutattr()`.
  - Removes mutability requirements from type hints when they are
    unnecessary (only the sub object/Mapping needs to by mutable).
 

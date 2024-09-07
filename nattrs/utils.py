@@ -86,11 +86,37 @@ def precompile_regexes(terms: List[str]) -> Tuple[str, Dict[str, re.Pattern]]:
     return modified_attr, regexes
 
 
+class Ignore:
+    """
+    Class for indicating that a value
+    should be ignored.
+
+    Example
+    -------
+    >>> if isinstance(x, Ignore):
+    >>>     continue
+
+    or
+
+    >>> l = [1, 2, Ignore(), 4]
+    >>> for el in l:
+    >>>     if not isinstance(el, Ignore):
+    >>>         print(el)
+
+    """
+
+    pass
+
+
 @dataclass(frozen=True)
 class MatchResult:
     __slots__ = ["attr_name", "value"]
     attr_name: str
     value: Any
+
+
+class MissingAttr:
+    pass
 
 
 def get_class_attributes(obj):

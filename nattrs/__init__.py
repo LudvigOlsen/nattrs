@@ -3,6 +3,7 @@ from .has_checker import nested_hasattr
 from .setter import nested_setattr
 from .mutator import nested_mutattr
 from .populate import populate_product
+from .utils import Ignore
 
 
 def get_version():
