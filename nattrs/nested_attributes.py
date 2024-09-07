@@ -575,8 +575,9 @@ def _precompile_regexes(terms: List[str]) -> Tuple[str, Dict[str, re.Pattern]]:
     return modified_attr, regexes
 
 
-@dataclass
+@dataclass(frozen=True)
 class MatchResult:
+    __slots__ = ["attr_name", "value"]
     attr_name: str
     value: Any
 
