@@ -1,4 +1,5 @@
 from typing import Any
+import re
 import pytest
 
 from nattrs import (
@@ -141,6 +142,25 @@ def test_nested_setattr_examples():
     with pytest.raises(KeyError):
         nested_setattr(a, "b.non_existing.k", 50, make_missing=False)
 
+    # Negative tests
+
+    # Should not affect other attributes
+    a = {"b": {"c": {"d": 1, "e": 2}}}
+    nested_setattr(a, "b.c.d", 50)
+    assert a["b"]["c"]["d"] == 50
+    assert a["b"]["c"]["e"] == 2  # Ensure "e" is unaffected
+
+    # Setting nonexistent attributes with make_missing=False should not change the structure
+    a = {"b": {"c": {"d": 1}}}
+    a_orig = a.copy()
+    try:
+        nested_setattr(a, "b.nonexistent.c", 999, make_missing=False)
+    except KeyError:
+        pass
+    assert a == a_orig
+    assert "nonexistent" not in a["b"]  # Ensure "nonexistent" is not created
+    assert a["b"]["c"]["d"] == 1  # Ensure "d" is unaffected
+
 
 def test_nested_setattr_regex():
     # Create class 'B' with a dict 'c' with the member 'd'
@@ -224,6 +244,33 @@ def test_nested_setattr_regex():
     a = {"b": {"c": {"d": 1}}}
     nested_setattr(a, "b.{.*}.x", 80, regex=True, make_missing=True)
     assert nested_getattr(a, "b.{.*}.x", regex=True) == {"b.c.x": 80}
+
+    # Negative tests
+
+    # Regex setting should not affect non-matching keys
+    a = {"b": {"c": {"d": 1, "f": 3}, "g": {"d": 2}}}
+    nested_setattr(a, "b.{.*}.d", 100, regex=True)
+    assert a["b"]["c"]["d"] == 100
+    assert a["b"]["g"]["d"] == 100
+    assert a["b"]["c"]["f"] == 3  # Ensure "f" is unaffected
+
+    # Regex does not match, no changes made to any part
+    a = {"b": {"c": {"d": 1}, "e": {"f": 2}}}
+    a_orig = a.copy()
+    nested_setattr(a, "b.{x}.d", 100, regex=True)
+    assert a == a_orig
+    assert a["b"]["c"]["d"] == 1  # No change, as regex didn't match
+    assert a["b"]["e"]["f"] == 2  # Ensure "e.f" is unaffected
+
+    a = {"b": {"c": {"d": 1}, "e": {"f": 2}}}
+    a_orig = a.copy()
+    try:
+        nested_setattr(a, "b.{[}.d", 100, regex=True)
+    except re.error:
+        pass
+    assert a == a_orig
+    assert a["b"]["c"]["d"] == 1  # Ensure no change on invalid regex
+    assert a["b"]["e"]["f"] == 2  # Ensure "e.f" is unaffected
 
 
 def test_nested_mutattr_examples():

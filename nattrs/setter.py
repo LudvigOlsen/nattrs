@@ -161,6 +161,8 @@ def _regex_nested_setattr(
 ) -> None:
     if isinstance(obj, utils.MatchResult):
         obj = obj.value
+    if obj is None:
+        return [None]
 
     getter = (
         partial(utils.dict_getter, default="make" if make_missing else "raise")
