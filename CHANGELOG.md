@@ -1,6 +1,13 @@
 Changelog
 --------
 
+v0.1.xx (xx-2024)
+
+ - Adds `regex` argument to `nested_getattr()` for using regular
+   expression to get attribute names / dict keys.
+ - Adds `getter_default` argument to `nested_mutattr()` to allow 
+   better handling of missing attributes.
+
 v0.1.3 (09-2024)
 
  - Adds `__version__` variable to package.

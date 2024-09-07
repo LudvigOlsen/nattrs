@@ -1,3 +1,4 @@
+from typing import Any
 import pytest
 
 from nattrs.nested_attributes import (
@@ -27,6 +28,46 @@ def test_nested_getattr_examples():
     assert nested_getattr(None, "b.o.p", allow_none=True) is None
     with pytest.raises(TypeError):
         assert nested_getattr(None, "b.o.p", allow_none=False)
+
+    assert nested_getattr(a, "b.{.*}.{.*}", regex=True) == {"b.c.d": 1}
+
+
+def test_nested_getattr_regex_examples():
+    # Create class 'B' with a dict 'c' with the member 'd'
+    class B:
+        def __init__(self):
+            self.c = {"e": 1, "f": 3}
+            self.d = {"e": 4, "g": 7}
+
+    # Add to a dict 'a'
+    a = {"b": B()}
+
+    print("Using multiple regex:")
+    print(nested_getattr(a, "b.{.*}.{.*}", regex=True))
+    nested_getattr(a, "b.{.*}.{.*}", regex=True) == {
+        "b.c.e": 1,
+        "b.c.f": 3,
+        "b.d.e": 4,
+        "b.d.g": 7,
+    }
+
+    # Ignores default when finding matches
+    nested_getattr(a, "b.{.*}.{.*}", default="hello", regex=True) == {
+        "b.c.e": 1,
+        "b.c.f": 3,
+        "b.d.e": 4,
+        "b.d.g": 7,
+    }
+
+    # Defaults to empty dict when nothing is found
+    print("When nothing found:")
+    print(nested_getattr(a, "b.o.{.*}.{.*}", default="hello", regex=True))
+    nested_getattr(a, "b.o.{.*}.{.*}", default="hello", regex=True) == {}
+
+    # object is None
+    assert nested_getattr(None, "b.o.{.*}", allow_none=True, regex=True) is None
+    with pytest.raises(TypeError):
+        assert nested_getattr(None, "b.o.{.*}", allow_none=False, regex=True)
 
 
 def test_nested_hasattr_examples():
@@ -102,3 +143,11 @@ def test_nested_mutattr_examples():
     # Check new value of p
     assert list(nested_getattr(a, "o").keys()) == ["p"]
     assert nested_getattr(a, "o.p") == [4, 5, 6, 7, 8, 9]
+
+    def handle_missing(x: Any):
+        if isinstance(x, str) and x == "missing_value":
+            return "missing"
+        return x
+
+    nested_mutattr(a, "b.c.h", handle_missing, getter_default="missing_value")
+    assert nested_getattr(a, "b.c.h") == "missing"
