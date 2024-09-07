@@ -28,15 +28,15 @@ python -m pip install git+https://github.com/ludvigolsen/nattrs
 
 # Main functions
 
-| Class/Function     | Description                                                                                                |
-| :----------------- | :--------------------------------------------------------------------------------------------------------- |
-| `nested_getattr`   | Get object attributes/dict members recursively, given by dot-separated names.                              |
-| `nested_setattr`   | Set object attribute/dict member by recursive lookup, given by dot-separated names.                        |
-| `nested_mutattr`   | Apply function (mutate) to object attribute/dict member by recursive lookup, given by dot-separated names. |
-| `nested_updattr`   | Update dict / class.__dict__ of attributes recursively, given by dot-separated names.                      |
-| `nested_hasattr`   | Check whether recursive object attributes/dict members exist.                                              |
-| `nested_delattr`   | Delete object attributes/dict members recursively, given by dot-separated names.                           |
-| `populate_product` | Create and populate nested dicts with specified layers and the same leaf value.                            |
+| Class/Function     | Description                                                                         |
+| :----------------- | :---------------------------------------------------------------------------------- |
+| `nested_getattr`   | Get object attributes/dict members recursively, given by dot-separated names.       |
+| `nested_setattr`   | Set object attribute/dict member by recursive lookup, given by dot-separated names. |
+| `nested_mutattr`   | Apply function (mutate) to nested object attribute/dict member.                     |
+| `nested_updattr`   | Update dict / class.__dict__ of nested attributes.                                  |
+| `nested_hasattr`   | Check whether recursive object attributes/dict members exist.                       |
+| `nested_delattr`   | Delete nested object attributes/dict members.                                       |
+| `populate_product` | Create and populate nested dicts with specified layers and the same leaf value.     |
 
 
 # Examples
