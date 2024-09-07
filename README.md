@@ -163,6 +163,26 @@ nested_hasattr(a, "b.o.p")
 
 ```
 
+## nested_delattr
+
+Check presence of the member 'd':
+
+```python
+
+nested_delattr(a, "b.c.d")
+nested_hasattr(a, "b.c.d")
+>> False
+
+```
+
+Ignore that it fails to find member 'o':
+
+```python
+
+nested_delattr(a, "b.o.p", allow_missing=True)
+
+```
+
 ## populate_product
 
 In this example, we wish to pre-populate nested dicts with empty lists to allow appending within a `for` loop. First, we go through the manual approach of doing this. Second, we show how easy it is to do with `populate_product()`. 
