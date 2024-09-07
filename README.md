@@ -1,5 +1,5 @@
-nattrs
---------
+
+# nattrs <a href='https://github.com/LudvigOlsen/nattrs'><img src='nattrs_242x280_259dpi.png' align="right" height="140" /></a>
 
 **Nested attributes** utility functions for python. Allows getting/setting of object attributes and dict members interchangeably.
 Useful to populate nested dicts for storing outputs of a loop.
