@@ -1,18 +1,27 @@
-[tool.poetry]
+[project]
 name = "nattrs"
 version = "0.2.2"
 description = "Nested attribute getter/setter that works with dictionaries and objects interchangeably."
-authors = ["Ludvig Renbo Olsen <mail@ludvigolsen.dk>"]
+authors = [{name = "Ludvig", email = "<mail@ludvigolsen.dk>"}]
 readme = "README.md"
 license = "MIT"
-include = ["CHANGELOG.md"]
-repository = "https://github.com/ludvigolsen/nattrs"
 keywords = [
     "attributes",
     "dictionaries",
     "class",
     "recursive",
+    "get",
+    "set",
+    "inplace"
 ]
+
+[project.urls]
+Repository = "https://github.com/ludvigolsen/nattrs"
+Issues = "https://github.com/ludvigolsen/nattrs/issues"
+Changelog = "https://github.com/ludvigolsen/nattrs/blob/main/CHANGELOG.md"
+
+[tool.poetry]
+include = ["CHANGELOG.md"]
 
 [tool.poetry.urls]
 issues = "https://github.com/ludvigolsen/nattrs/issues"

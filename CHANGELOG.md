@@ -1,6 +1,10 @@
 Changelog
 --------
 
+v0.2.3 (02-2025)
+
+ - Updates pyproject.toml to new poetry version.
+
 v0.2.2 (09-2024)
 
  - Fixes path to hexagon badge when viewing outside of GitHub.
