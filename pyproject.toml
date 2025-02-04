@@ -1,6 +1,6 @@
 [project]
 name = "nattrs"
-version = "0.2.2"
+version = "0.2.3"
 description = "Nested attribute getter/setter that works with dictionaries and objects interchangeably."
 authors = [{name = "Ludvig", email = "<mail@ludvigolsen.dk>"}]
 readme = "README.md"
