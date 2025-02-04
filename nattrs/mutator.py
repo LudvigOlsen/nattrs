@@ -23,7 +23,7 @@ def nested_mutattr(
     `getter_default` value to the mutating `fn` and create the missing
     attribute.
 
-    Tip: The mutating function can perform checks of typing (e.g. consistency between
+    Tip: The mutating function can perform checks of typing (e.g., consistency between
     the new and original values) or similar.
 
     Note: When the attributes / keys in `attr` themselves include dots, those need to be
@@ -48,7 +48,7 @@ def nested_mutattr(
         Whether `fn` affects the attribute inplace. In this case,
         no output is expected (and is ignored), as we expect the
         function to have made the relevant change when applied.
-        E.g. useful for `numpy.ndarrays` that we do not
+        E.g., useful for `numpy.ndarrays` that we do not
         wish to copy.
         Note: Since no value is directly assigned to `obj`,
         this cannot be done on `getter_default` values
@@ -58,7 +58,7 @@ def nested_mutattr(
         Either:
             `Ignore()` (default)
                 Leads to no action being taken on those missing attributes.
-            User-specified value (e.g. `None`)
+            User-specified value (e.g., `None`)
                 This value is passed to `fn()` and the attribute is created
                 with the returned value (note: `is_inplace_fn=True` won't work
                 in this case as the value would never be assigned to `obj`).
@@ -182,7 +182,7 @@ def _regex_nested_mutattrs(
 
     try:
         # If the function works in-place
-        # e.g. on dicts or objects
+        # e.g., on dicts or objects
         if is_inplace_fn:
             for old_val in old_vals.values():
                 fn(old_val)

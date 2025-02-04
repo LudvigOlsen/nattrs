@@ -51,7 +51,7 @@ def nested_updattr(
 
     if not isinstance(update_dict, Mapping):
         raise TypeError(
-            "`update_dict` must be of type `Mapping` (e.g. `dict`) "
+            "`update_dict` must be of type `Mapping` (e.g., `dict`) "
             f"but was: {type(update_dict)}"
         )
 

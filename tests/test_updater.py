@@ -118,7 +118,7 @@ def test_nested_updattr():
     with pytest.raises(TypeError) as exc_info:
         nested_updattr(a, "b.c", "not a dict")
     assert (
-        "`update_dict` must be of type `Mapping` (e.g. `dict`) but was"
+        "`update_dict` must be of type `Mapping` (e.g., `dict`) but was"
         in exc_info.value.args[0]
     )
 
