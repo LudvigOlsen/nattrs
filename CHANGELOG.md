@@ -1,6 +1,10 @@
 Changelog
 --------
 
+v0.3.0 (07-2026)
+
+ - Rejects `__*__` dunders in attributes across all functions. Thanks to Nils Eric Jordan for reporting.
+
 v0.2.3 (02-2025)
 
  - Updates pyproject.toml to new poetry version.
