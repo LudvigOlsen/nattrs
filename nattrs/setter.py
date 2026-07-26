@@ -1,7 +1,7 @@
 from functools import partial
 from typing import Callable, Dict, List, Any, Optional, Union
 from collections.abc import Mapping, MutableMapping
-import nattrs.utils as utils
+from nattrs import utils
 import re
 
 
@@ -147,6 +147,8 @@ def _nested_setattr(
         setter = utils.dict_setter if isinstance(obj, MutableMapping) else setattr
         setter(obj, attr, value)
         return
+    if left.startswith("__") or left.endswith("__"):
+        raise ValueError(f"Access to private attribute '{left}' is not allowed")
     nested_setattr(
         obj=getter(obj, left),
         attr=right,
