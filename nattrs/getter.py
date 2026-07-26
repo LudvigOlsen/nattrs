@@ -145,7 +145,9 @@ def _nested_getattr(obj: Union[object, Mapping], attr: str, default: Any = None)
     try:
         left, right = attr.split(".", 1)
     except:  # noqa: E722
+        utils.validate_attr(obj, attr)
         return getter(obj, attr, default)
+    utils.validate_attr(obj, left)
     return _nested_getattr(
         obj=getter(obj, left, default),
         attr=right,
@@ -232,6 +234,7 @@ def _match_and_get_attr(
 
         for key in keys:
             if re.fullmatch(pattern, key):
+                utils.validate_attr(obj, key)
                 # Collect all matches
                 matches.append(
                     utils.MatchResult(
@@ -246,6 +249,7 @@ def _match_and_get_attr(
         )  # Return all matches, or default if no match
 
     # Fallback to non-regex case
+    utils.validate_attr(obj, attr)
     return [
         utils.MatchResult(
             attr_name=f"{prev_attr}.{_dotted_attr(attr)}" if prev_attr else attr,

@@ -117,12 +117,14 @@ def _nested_delattr(
                 return
             del obj[attr]
         else:
+            utils.validate_attr(obj, attr)
             if allow_missing and not hasattr(obj, attr):
                 return
             delattr(obj, attr)
         return
 
     # Get the next attribute level
+    utils.validate_attr(obj, left)
     next_obj = getter(obj, left, None)
     if obj is None:
         if not allow_missing:
@@ -164,12 +166,14 @@ def _regex_nested_delattrs(
                 return
             del obj[left_term]
         else:
+            utils.validate_attr(obj, left_term)
             if allow_missing and not hasattr(obj, left_term):
                 return
             delattr(obj, left_term)
         return
 
     # Get the next attribute level
+    utils.validate_attr(obj, left_term)
     next_obj = getter(obj, left_term, None)
     if obj is None:
         if not allow_missing:

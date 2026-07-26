@@ -190,3 +190,40 @@ def test_nested_setattr_regex():
     assert a == a_orig
     assert a["b"]["c"]["d"] == 1  # Ensure no change on invalid regex
     assert a["b"]["e"]["f"] == 2  # Ensure "e.f" is unaffected
+
+
+def test_nested_setattr_rejects_dunder_object_attributes():
+    class Victim:
+        def __init__(self):
+            self.value = 1
+
+    victim = Victim()
+
+    with pytest.raises(ValueError, match="__init__"):
+        nested_setattr(victim, "__init__.__globals__.value", "changed")
+
+    with pytest.raises(ValueError, match="__dict__"):
+        nested_setattr(victim, "__dict__", {})
+
+    with pytest.raises(ValueError, match="__init__"):
+        nested_setattr(
+            victim,
+            "__init__.__globals__.value",
+            "changed",
+            regex=True,
+        )
+
+    with pytest.raises(ValueError, match="__init__"):
+        nested_setattr(
+            Victim,
+            "{__init__}.__globals__.value",
+            "changed",
+            regex=True,
+        )
+
+
+def test_nested_setattr_allows_dunder_mapping_keys():
+    value = {"__metadata__": {"value": 1}}
+    nested_setattr(value, "__metadata__.value", 2)
+    nested_setattr(value, "__leaf__", 3)
+    assert value == {"__metadata__": {"value": 2}, "__leaf__": 3}

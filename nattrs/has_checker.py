@@ -115,5 +115,7 @@ def _nested_hasattr(obj: Union[object, Mapping], attr: str):
     try:
         left, right = attr.split(".", 1)
     except:  # noqa: E722
+        utils.validate_attr(obj, attr)
         return has_checker(obj, attr)
+    utils.validate_attr(obj, left)
     return _nested_hasattr(getter(obj, left, None), right)

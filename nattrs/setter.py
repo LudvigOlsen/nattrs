@@ -144,11 +144,11 @@ def _nested_setattr(
     try:
         left, right = attr.split(".", 1)
     except:  # noqa: E722
+        utils.validate_attr(obj, attr)
         setter = utils.dict_setter if isinstance(obj, MutableMapping) else setattr
         setter(obj, attr, value)
         return
-    if left.startswith("__") or left.endswith("__"):
-        raise ValueError(f"Access to private attribute '{left}' is not allowed")
+    utils.validate_attr(obj, left)
     nested_setattr(
         obj=getter(obj, left),
         attr=right,
@@ -255,6 +255,7 @@ def _match_and_set_attr(
 
         for key in keys:
             if re.fullmatch(pattern, key):
+                utils.validate_attr(obj, key)
                 if is_leaf:  # Only set if this is the final (leaf) term
                     setter(obj, key, value)
                 matches.append(
@@ -271,6 +272,7 @@ def _match_and_set_attr(
         return matches if matches else [None]
 
     # For non-regex terms, and if it's a leaf, set the value
+    utils.validate_attr(obj, attr)
     if is_leaf:
         setter(obj, attr, value)
 

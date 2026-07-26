@@ -6,6 +6,13 @@ from collections.abc import Mapping, MutableMapping
 DOT_PLACEHOLDER = "[[DOT]]"  # Placeholder for dots inside regex terms
 
 
+def validate_attr(obj: Any, attr: str) -> None:
+    if not isinstance(obj, Mapping) and (
+        attr.startswith("__") or attr.endswith("__")
+    ):
+        raise ValueError(f"Access to private attribute '{attr}' is not allowed")
+
+
 def get_or_make_attr(__o: object, __name: str):
     if not hasattr(__o, __name):
         setattr(__o, __name, {})
